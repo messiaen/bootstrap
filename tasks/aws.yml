@@ -1,0 +1,21 @@
+- name: Ensure .aws exists
+  become: true
+  become_user: "{{ local_user }}"
+  file:
+    dest: "{{ home_dir }}/.aws"
+    mode: 0775
+    state: directory
+- name: Install aws config
+  become: true
+  become_user: "{{ local_user }}"
+  copy:
+    src: "{{ aws_files }}/config"
+    dest: "{{ home_dir }}/.aws/config"
+    mode: 0600
+- name: Install aws creds
+  become: true
+  become_user: "{{ local_user }}"
+  copy:
+    src: "{{ aws_files }}/credentials"
+    dest: "{{ home_dir }}/.aws/credentials"
+    mode: 0600

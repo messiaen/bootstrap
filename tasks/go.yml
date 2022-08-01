@@ -1,0 +1,7 @@
+- name: Install go binary
+  become: true
+  become_user: {{ local_user }}
+  unarchive:
+    src: "https://go.dev/dl/go1.18.3.linux-amd64.tar.gz"
+    dest: "{{ home_dir }}/opt"
+    remote_src: true

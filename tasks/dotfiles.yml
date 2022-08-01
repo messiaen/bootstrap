@@ -1,0 +1,11 @@
+- name: Install stow
+  apt:
+    name: stow
+- name: Remove original config files
+  become: true
+  become_user: {{ local_user }}
+  shell: "{{ playbook_dir }}/dotfiles/bin/bin/rm-old-configs.sh {{ playbook_dir }}/dotfiles {{ home_dir }}"
+- name: Stow dotfiles
+  become: true
+  become_user: {{ local_user }}
+  shell: "stow -R -d {{ playbook_dir }}/dotfiles -t {{ home_dir }} alacritty bash bin conda git konsole nvim tmux i3"

@@ -1,0 +1,13 @@
+- name: Install core libs
+  apt:
+    update_cache: true
+    name:
+    - awesome
+    - i3
+- name: i3 with plasma desktop
+  copy:
+    src: "plasma-i3.desktop"
+    dest: "/usr/share/xsessions/plasma-i3.desktop"
+    mode: 0644
+    owner: root
+    group: root

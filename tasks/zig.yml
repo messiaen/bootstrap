@@ -1,0 +1,4 @@
+- name: Install zig
+  become: true
+  become_user: "{{ local_user }}"
+  shell: "cd {{ home_dir }}/code; curl -L -Ss -XGET https://ziglang.org/builds/zig-linux-x86_64-0.10.0-dev.3051+b8bf5de75.tar.xz | tar -xJ"

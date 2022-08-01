@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [ $# -eq 1 ]; then
+	proj=${1}
+else
+	proj=$(fd -d 1 -t d . ~/code | fzf)
+fi
+
+if [ -z $proj ]; then
+	exit 0
+fi
+
+proj_name=$(basename ${proj})
+tmux_running=$(pgrep tmux)
+
+if [[ -z ${TMUX} ]] && [[ -z ${tmux_running} ]]; then
+	tmux new-session -s $proj_name -c $proj
+	exit 0
+fi
+
+if ! tmux has-session -t=$proj_name 2> /dev/null; then
+	tmux new-session -d -s $proj_name -c $proj
+fi
+
+if [[ -z ${TMUX} ]]; then
+	tmux attach -t $proj_name
+else
+	tmux switch-client -t $proj_name
+fi

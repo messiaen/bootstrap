@@ -1,0 +1,7 @@
+- name: Install nvim binary
+  become: true
+  become_user: {{ local_user }}
+  unarchive:
+    src: "https://github.com/neovim/neovim/releases/download/v0.7.2/nvim-linux64.tar.gz"
+    dest: "{{ home_dir }}/opt"
+    remote_src: true

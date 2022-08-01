@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if ! tmux has-session -t=START 2> /dev/null; then
+	tmux new-session -s START
+fi
+
+tmux attach -t START

@@ -1,0 +1,17 @@
+- name: Install Nerd Font
+  become: true
+  become_user: "{{ local_user }}"
+  unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
+    dest: "{{ home_dir }}/.fonts"
+    remote_src: true
+- name: Fetch Starship
+  become: true
+  become_user: "{{ local_user }}"
+  get_url:
+    url: https://starship.rs/install.sh
+    dest: /tmp/starship-install.sh
+- name: Install Starship
+  become: true
+  become_user: "{{ local_user }}"
+  shell: "sh /tmp/starship-install.sh -y -b ${HOME}/bin"

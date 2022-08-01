@@ -1,0 +1,51 @@
+- name: Ensure .ssh directory exists
+  become: true
+  become_user: "{{ local_user }}"
+  file:
+    dest: "{{ home_dir }}/.ssh"
+    mode: 0755
+    state: directory
+- name: Install config
+  become: true
+  become_user: "{{ local_user }}"
+  copy:
+    src: "{{ ssh_files }}/config"
+    dest: "{{ home_dir }}/.ssh/config"
+    mode: 0600
+- name: Install ssh key
+  become: true
+  become_user: "{{ local_user }}"
+  copy:
+    src: "{{ ssh_files }}/{{ ssh_key_name }}"
+    dest: "{{ home_dir }}/.ssh/{{ ssh_key_name }}"
+    mode: 0600
+- name: Install ssh key 2
+  become: true
+  become_user: "{{ local_user }}"
+  copy:
+    src: "{{ ssh_files }}/{{ ssh_key_name2 }}"
+    dest: "{{ home_dir }}/.ssh/{{ ssh_key_name2 }}"
+    mode: 0600
+- name: Install public ssh key
+  become: true
+  become_user: "{{ local_user }}"
+  copy:
+    src: "{{ ssh_files }}/{{ ssh_key_name }}.pub"
+    dest: "{{ home_dir }}/.ssh/{{ ssh_key_name }}.pub"
+    mode: 0644
+- name: Install public ssh key 2
+  become: true
+  become_user: "{{ local_user }}"
+  copy:
+    src: "{{ ssh_files }}/{{ ssh_key_name2 }}.pub"
+    dest: "{{ home_dir }}/.ssh/{{ ssh_key_name2 }}.pub"
+    mode: 0644
+- name: authorize key
+  become: true
+  become_user: "{{ local_user }}"
+  authorized_key:
+    user: "{{ local_user }}"
+    state: present
+    key: "{{ lookup('file', item) }}"
+  with_fileglob:
+  - "{{ home_dir }}/.ssh/*.pub"

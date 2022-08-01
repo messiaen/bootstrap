@@ -1,0 +1,133 @@
+- hosts: localhost
+  become: true
+  vars:
+    local_user: "moose"
+    home_dir: "/home/moose"
+    ssh_files: "./ssh_files"
+    ssh_key_name: "moose_id_rsa"
+    ssh_key_name2: "root_id_rsa"
+    aws_files: "./aws_files"
+    nvidia_packages: "./nvidia-packages"
+  pre_tasks:
+    - name: Update cache
+      apt:
+        name: ['sudo', 'zip']
+        update_cache: true
+      tags:
+      - docker
+      - python_asr
+      - dotfiles
+      - core
+      - cuda
+      - core_g
+    - name: Create directories in home dir
+      become: true
+      become_user: moose
+      file:
+        path: "/home/moose/{{ item }}"
+        mode: 0755
+        state: directory
+      loop: ["opt", "bin", ".fonts", "code"]
+      tags:
+        - docker
+        - python_asr
+        - dotfiles
+        - core
+        - cuda
+  tasks:
+    - name: core installs
+      include_tasks:
+        file: tasks/core.yml
+        apply:
+          tags:
+            - core
+      tags:
+      - core
+    - name: docker tasks
+      include_tasks:
+        file: tasks/docker.yml
+        apply:
+          tags:
+            - docker
+      tags:
+      - docker
+    - name: bash tasks
+      include_tasks:
+        file: tasks/bash.yml
+        apply:
+          tags:
+            - core
+      tags:
+      - core
+    - name: rust tasks
+      include_tasks:
+        file: tasks/rust.yml
+        apply:
+          tags:
+            - core
+      tags:
+      - core
+    - name: nvim tasks
+      include_tasks:
+        file: tasks/nvim.yml
+        apply:
+          tags:
+            - core
+      tags:
+      - core
+    - name: golang tasks
+      include_tasks:
+        file: tasks/go.yml
+        apply:
+          tags:
+            - core
+      tags:
+      - core
+    - name: dotfiles tasks
+      include_tasks:
+        file: tasks/dotfiles.yml
+        apply:
+          tags:
+            - dotfiles
+      tags:
+      - dotfiles
+    - name: ssh tasks
+      include_tasks:
+        file: tasks/ssh.yml
+        apply:
+          tags:
+            - dotfiles
+      tags:
+        - dotfiles
+    - name: aws tasks
+      include_tasks:
+        file: tasks/aws.yml
+        apply:
+          tags:
+            - dotfiles
+      tags:
+        - dotfiles
+    - name: python_asr tasks
+      include_tasks:
+        file: tasks/asr_python.yml
+        apply:
+          tags:
+            - python_asr
+      tags:
+      - python_asr
+    - name: cuda tasks
+      include_tasks:
+        file: tasks/nvidia.yml
+        apply:
+          tags:
+            - cuda
+      tags:
+      - cuda
+    - name: graphic tasks
+      include_tasks:
+        file: tasks/core_g.yml
+        apply:
+          tags:
+            - core_g
+      tags:
+      - core_g

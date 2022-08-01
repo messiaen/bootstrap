@@ -1,0 +1,10 @@
+- name: Get Rustup
+  become: true
+  become_user: {{ local_user }}
+  get_url:
+    url: https://sh.rustup.rs
+    dest: /tmp/sh.rustup.rs
+- name: Install rust
+  become: true
+  become_user: {{ local_user }}
+  shell: "sh /tmp/sh.rustup.rs -y"

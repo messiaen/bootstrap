@@ -1,0 +1,33 @@
+- name: Install cuda 11.1
+  become: true
+  become_user: root
+  shell: "CC=/usr/bin/gcc-9 CXX=/usr/bin/g++-9 sh {{ nvidia_packages }}/cuda_11.1.0_455.23.05_linux.run --silent --toolkit --toolkitpath=/usr/local/cuda-11.1 --override"
+- name: Install cuda 11.7
+  become: true
+  become_user: root
+  shell: "CC=/usr/bin/gcc-9 CXX=/usr/bin/g++-9 sh {{ nvidia_packages }}/cuda_11.1.0_455.23.05_linux.run --silent --toolkit --toolkitpath=/usr/local/cuda-11.7 --override"
+- name: Install cudnn 8.2
+  become: true
+  become_user: root
+  shell: "tar -xzf {{ nvidia_packages }}/cudnn-11.3-linux-x64-v8.2.1.32 --transform 's,^,/usr/local/cuda-11.1/,'"
+- name: Install cudnn 8.4
+  become: true
+  become_user: root
+  shell: "tar -xJf {{ nvidia_packages }}/cudnn-linux-x86_64-8.4.1.50_cuda11.6-archive.tar.xz --transform 's,^,/usr/local/cuda-11.7/,'"
+- name: Install TensorRT-7
+  become: true
+  become_user: root
+  shell: "tar -xzf {{ nvidia_packages }}/TensorRT-7.2.2.3.Ubuntu-18.04.x86_64-gnu.cuda-11.1.cudnn8.0.tar --transform 's,^,/usr/local/cuda-11.1/,'"
+- name: Install TensorRT-8
+  become: true
+  become_user: root
+  shell: "tar -xzf {{ nvidia_packages }}/TensorRT-8.4.1.5.Linux.x86_64-gnu.cuda-11.6.cudnn8.4.tar --transform 's,^,/usr/local/cuda-11.7/,'"
+- name: symlink cuda
+  become: true
+  become_user: root
+  file:
+    src: /usr/local/cuda-11.7
+    dest: /usr/local/cuda
+    owner: root
+    group: root
+    state: link

@@ -1,0 +1,10 @@
+FROM ubuntu:jammy AS base
+ARG TAGS
+RUN addgroup --gid 1000 moose
+RUN adduser --gecos moose --uid 1000 --gid 1000 --disabled-password moose
+USER moose
+WORKDIR /home/moose
+
+FROM base
+COPY . .
+CMD ["sh", "-c", "ansible-playbook $TAGS local.yml"]
