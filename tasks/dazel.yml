@@ -1,0 +1,25 @@
+- name: Create opt bin
+  become: true
+  become_user: "{{ local_user }}"
+  file:
+    path: "{{ home_dir }}/opt/bin"
+    mode: 0755
+    state: directory
+- name: install bazelisk
+  become: true
+  become_user: "{{ local_user }}"
+  get_url:
+    url: https://github.com/bazelbuild/bazelisk/releases/download/v1.12.0/bazelisk-darwin-amd64
+    dest: "{{ home_dir }}/opt/bin/bazelisk"
+- name: install bazel link
+  become: true
+  become_user: "{{ local_user }}"
+  file:
+    src: "{{ home_dir }}/opt/bin/bazelisk"
+    dest: "{{ home_dir }}/opt/bin/bazel"
+- name: clone dazel
+  become: true
+  become_user: "{{ local_user }}"
+  git:
+    repo: "ssh://git@gitlab-master.nvidia.com:12051/rleary/dazel.git"
+    dest: "{{ home_dir }}/code/dazel"

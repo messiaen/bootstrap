@@ -19,9 +19,9 @@ local on_attach = function(client, bufnr)
            source = 'always',  -- show source in diagnostic popup window
            prefix = ' '}
 
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<Cmd>tab split | lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gD', ':lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', ':lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', ':lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', '<leader>t', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
@@ -30,6 +30,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '[c', '<cmd>lua vim.diagnostic.goto_prev({ float = { border = "rounded" }})<CR>', opts)
   buf_set_keymap('n', ']c', '<cmd>lua vim.diagnostic.goto_next({ float = { border = "rounded" }})<CR>', opts)
   buf_set_keymap("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist({open = true})<CR>", opts)
+  buf_set_keymap("n", "<leader>gH", "<cmd>ClangdSwitchSourceHeader<CR>", opts)
 
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
@@ -65,8 +66,13 @@ nvim_lsp.pylsp.setup({
     capabilities = capabilities,
 })
 
-require'lspconfig'.clangd.setup{}
-require'lspconfig'.gopls.setup{}
+require'lspconfig'.clangd.setup{
+	on_attach = on_attach,
+	cmd = { "clangd-12", "--header-insertion=never", "--query-driver=**" }
+}
+require'lspconfig'.gopls.setup{
+	on_attach = on_attach
+}
 
 -- Use pyright or jedi_language_server
 --local servers = {'jedi_language_server'}

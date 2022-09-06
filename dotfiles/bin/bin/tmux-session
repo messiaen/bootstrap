@@ -3,14 +3,17 @@
 if [ $# -eq 1 ]; then
 	proj=${1}
 else
-	proj=$(fd -d 1 -t d . ~/code | fzf)
+	proj=$(fd -d 3 -t d . ~/code | fzf)
 fi
 
 if [ -z $proj ]; then
 	exit 0
 fi
 
-proj_name=$(basename ${proj})
+proj_dirname=$(echo $(basename $(dirname ${proj})) | sed 's/\./_/')
+proj_basename=$(echo $(basename ${proj}) | sed 's/\./_/')
+
+proj_name="${proj_dirname%%_git}_${proj_basename}"
 tmux_running=$(pgrep tmux)
 
 if [[ -z ${TMUX} ]] && [[ -z ${tmux_running} ]]; then

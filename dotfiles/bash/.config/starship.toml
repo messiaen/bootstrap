@@ -4,3 +4,6 @@ disabled = true
 
 [cmake]
 disabled = true
+
+[python]
+disabled = true

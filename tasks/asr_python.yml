@@ -15,25 +15,25 @@
     group: "{{ local_user }}"
     mode: 0755
     state: directory
-- name: clone nemo
-  become: true
-  become_user: "{{ local_user }}"
-  git:
-    repo: "https://github.com/NVIDIA/NeMo.git"
-    dest: "{{ home_dir }}/code/NeMo"
-- name: create asr conda env
-  become: true
-  become_user: "{{ local_user }}"
-  shell: "{{ home_dir }}/anaconda3/condabin/conda create -y -n asr python=3.8"
-- name: install pytorch in asr env
-  become: true
-  become_user: "{{ local_user }}"
-  shell: "{{ home_dir }}/anaconda3/condabin/conda install -y -n asr pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch"
-- name: install nemo in asr conda env
-  become: true
-  become_user: "{{ local_user }}"
-  shell: "(cd {{ home_dir }}/code/NeMo; $({{ home_dir }}/anaconda3/condabin/conda env list | grep -E '^asr' | awk '{print $2}')/bin/pip install -e .)"
-- name: pip install other packages in asr env
-  become: true
-  become_user: "{{ local_user }}"
-  shell: "(cd {{ home_dir }}/code/NeMo; $({{ home_dir }}/anaconda3/condabin/conda env list | grep -E '^asr' | awk '{print $2}')/bin/pip install python-lsp-server)"
+#- name: clone nemo
+#  become: true
+#  become_user: "{{ local_user }}"
+#  git:
+#    repo: "https://github.com/NVIDIA/NeMo.git"
+#    dest: "{{ home_dir }}/code/NeMo"
+#- name: create asr conda env
+#  become: true
+#  become_user: "{{ local_user }}"
+#  shell: "{{ home_dir }}/anaconda3/condabin/conda create -y -n asr python=3.8"
+#- name: install pytorch in asr env
+#  become: true
+#  become_user: "{{ local_user }}"
+#  shell: "{{ home_dir }}/anaconda3/condabin/conda install -y -n asr pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch"
+#- name: install nemo in asr conda env
+#  become: true
+#  become_user: "{{ local_user }}"
+#  shell: "(cd {{ home_dir }}/code/NeMo; $({{ home_dir }}/anaconda3/condabin/conda env list | grep -E '^asr' | awk '{print $2}')/bin/pip install -e .)"
+#- name: pip install other packages in asr env
+#  become: true
+#  become_user: "{{ local_user }}"
+#  shell: "(cd {{ home_dir }}/code/NeMo; $({{ home_dir }}/anaconda3/condabin/conda env list | grep -E '^asr' | awk '{print $2}')/bin/pip install python-lsp-server)"

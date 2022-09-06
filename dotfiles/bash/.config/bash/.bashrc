@@ -125,9 +125,13 @@ if [ -f ~/.config/bash/path.sh ]; then
 	source ~/.config/bash/path.sh
 fi
 
-source "$HOME/.cargo/env"
+if [ -f "$HOME/.cargo/env" ]; then
+	source "$HOME/.cargo/env"
+fi
 
 FZF_DEFAULT_COMMAND='fd --type f --hidden --color=never'
 FZF_DEFAULT_OPTS='--no-height'
 
 eval "$(starship init bash)"
+
+DOCKER_BUILDKIT=1

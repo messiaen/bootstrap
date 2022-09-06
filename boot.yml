@@ -1,8 +1,8 @@
 - hosts: localhost
   become: true
   vars:
-    local_user: "moose"
-    home_dir: "/home/moose"
+    local_user: "grclark"
+    home_dir: "/home/grclark"
     ssh_files: "./ssh_files"
     ssh_key_name: "moose_id_rsa"
     ssh_key_name2: "root_id_rsa"
@@ -22,9 +22,9 @@
       - core_g
     - name: Create directories in home dir
       become: true
-      become_user: moose
+      become_user: "{{ local_user }}"
       file:
-        path: "/home/moose/{{ item }}"
+        path: "{{ home_dir }}/{{ item }}"
         mode: 0755
         state: directory
       loop: ["opt", "bin", ".fonts", "code"]
@@ -64,9 +64,9 @@
         file: tasks/rust.yml
         apply:
           tags:
-            - core
+            - rust
       tags:
-      - core
+      - rust
     - name: nvim tasks
       include_tasks:
         file: tasks/nvim.yml
@@ -96,17 +96,17 @@
         file: tasks/ssh.yml
         apply:
           tags:
-            - dotfiles
+            - ssh
       tags:
-        - dotfiles
+        - ssh
     - name: aws tasks
       include_tasks:
         file: tasks/aws.yml
         apply:
           tags:
-            - dotfiles
+            - ssh
       tags:
-        - dotfiles
+        - ssh
     - name: python_asr tasks
       include_tasks:
         file: tasks/asr_python.yml
